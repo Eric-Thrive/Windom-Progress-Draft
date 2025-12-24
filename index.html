@@ -16,7 +16,6 @@
       --stat-p-bg: #fff5d9; --stat-p-border: #f1c40f; --stat-p-text: #967a0a;
       --stat-np-bg:#ebebeb; --stat-np-border:#95a5a6; --stat-np-text:#586364;
 
-      /* Header Styling */
       --head-bg: #ffffff;
       --head-text: #2c3e50;
     }
@@ -25,7 +24,7 @@
 
     body {
       margin: 0;
-      padding: 10px 15px; /* Reduced Body Padding */
+      padding: 10px 15px;
       font-family: "Quicksand", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg-page);
       color: var(--text-main);
@@ -34,6 +33,7 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden; /* Main page doesn't scroll, inner area does */
     }
 
     .container {
@@ -45,10 +45,10 @@
       flex-direction: column;
     }
 
-    /* HEADER */
+    /* HEADER - WIDE & COMPACT */
     header {
       text-align: center;
-      margin-bottom: 10px; /* Reduced Margin */
+      margin-bottom: 10px;
       display: flex;
       justify-content: center;
       flex-shrink: 0;
@@ -58,34 +58,22 @@
       background: linear-gradient(180deg, #eef2f6 0%, #dae1e9 100%);
       border: 2px solid white;
       border-radius: 12px;
-      padding: 8px 30px; /* Tighter Padding */
+      padding: 8px 30px;
       box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.3), 0 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
       width: 100%;
-      max-width: 800px;
-      position: relative;
+      max-width: 950px;
       display: flex;
-      flex-direction: row; /* Horizontal Layout for compactness */
+      flex-direction: row;
       align-items: center;
       justify-content: center;
       gap: 15px;
     }
 
-    /* SVG Tree Container */
-    .tree-icon {
-      width: 32px; /* Smaller Tree */
-      height: 32px;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-    }
+    .tree-icon { width: 36px; height: 36px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
 
-    .header-text-col {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
+    .header-text-col { display: flex; flex-direction: column; align-items: flex-start; }
 
     .top-pill {
-      display: inline-block;
       background: rgba(255, 255, 255, 0.7);
       color: #475569;
       padding: 2px 8px;
@@ -98,384 +86,103 @@
       margin-bottom: 2px;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 18px; /* Smaller Title */
-      color: #1e293b;
-      font-weight: 900;
-      letter-spacing: -0.3px;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-    
-    .header-subtext {
-      font-size: 11px;
-      color: #556070;
-      font-weight: 500;
-      font-family: "Georgia", serif;
-      font-style: italic;
-    }
+    h1 { margin: 0; font-size: 20px; color: #1e293b; font-weight: 900; line-height: 1; text-transform: uppercase; }
+    .header-subtext { font-size: 12px; color: #556070; font-family: "Georgia", serif; font-style: italic; }
 
     /* CONTROLS */
-    .controls-wrapper {
-      text-align: center;
-      margin-bottom: 10px; /* Reduced Margin */
-      flex-shrink: 0;
-    }
-    .tri-controls {
-      display: inline-flex;
-      justify-content: center;
-      gap: 5px;
-      background: white;
-      padding: 4px;
-      border-radius: 50px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .tri-btn {
-      border: none;
-      background: transparent;
-      padding: 6px 16px; /* Smaller Buttons */
-      border-radius: 40px;
-      font-weight: 700;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 11px;
-      transition: all 0.2s ease;
-    }
-
+    .controls-wrapper { text-align: center; margin-bottom: 10px; flex-shrink: 0; }
+    .tri-controls { display: inline-flex; gap: 5px; background: white; padding: 4px; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .tri-btn { border: none; background: transparent; padding: 6px 16px; border-radius: 40px; font-weight: 700; color: var(--text-muted); cursor: pointer; font-size: 11px; transition: all 0.2s; }
     .tri-btn:hover { background: #f1f5f9; }
+    .tri-btn.active { background: #2c3e50; color: white; box-shadow: 0 2px 6px rgba(44, 62, 80, 0.3); }
 
-    .tri-btn.active {
-      background: #2c3e50;
-      color: white;
-      box-shadow: 0 2px 6px rgba(44, 62, 80, 0.3);
+    /* STABLE STATUS BANNER */
+    .status-banner {
+      display: flex; border-radius: 12px; padding: 8px; justify-content: center; gap: 30px; align-items: center;
+      transition: all 0.5s ease; min-height: 55px; border: 2px solid transparent; margin-bottom: 10px;
     }
-    
-    .controls-hint {
-      display: none; /* Hide hint to save space */
-    }
+    .banner-t1 { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #93c5fd; }
+    .banner-t2 { background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%); border-color: #fde047; }
+    .banner-t3 { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); border-color: #86efac; }
+    .banner-stat { text-align: center; animation: fadeIn 0.5s ease; }
+    .bn-val { font-size: 18px; font-weight: 800; display: block; line-height: 1; }
+    .bn-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .banner-t1 .bn-val { color: #1e40af; } .banner-t2 .bn-val { color: #854d0e; } .banner-t3 .bn-val { color: #15803d; }
 
-    /* DASHBOARD GRID */
-    .dashboard-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-shrink: 0;
-    }
+    /* DASHBOARD */
+    .dashboard-summary { display: grid; grid-template-columns: 1fr 180px 1fr; gap: 10px; align-items: stretch; margin-bottom: 10px; }
+    @media (max-width: 800px) { .dashboard-summary { grid-template-columns: 1fr; } }
+    .dash-card { background: white; border-radius: 12px; padding: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.04); min-height: 140px; }
+    .dash-title { font-size: 9px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-align: center; letter-spacing: 0.5px; }
 
-    /* T3 Banner */
-    .t3-banner {
-      display: none;
-      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-      border: 2px solid #86efac;
-      border-radius: 12px;
-      padding: 8px;
-      justify-content: center;
-      gap: 20px;
-      align-items: center;
-      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .t3-banner.visible { display: flex; }
-    
-    .banner-stat { text-align: center; }
-    .bn-val { font-size: 18px; font-weight: 800; color: #15803d; display: block; line-height: 1; }
-    .bn-lbl { font-size: 10px; font-weight: 700; color: #166534; text-transform: uppercase; }
-
-
-    /* Main 3-Col Layout */
-    .dashboard-summary {
-      display: grid;
-      grid-template-columns: 1fr 200px 1fr; /* Narrower Center */
-      gap: 10px;
-      align-items: stretch;
-    }
-    @media (max-width: 800px) { 
-      .dashboard-summary { grid-template-columns: 1fr; } 
-      .gauge-wrapper { margin: 0 auto; }
-    }
-
-    .dash-card {
-      background: white;
-      border-radius: 12px;
-      padding: 10px; /* Reduced Padding */
-      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
-      border: 1px solid rgba(0,0,0,0.04);
-      position: relative;
-      overflow: visible;
-      transition: transform 0.3s ease;
-      min-height: 140px; /* Smaller Min Height */
-    }
-    
-    .dash-card.center-card {
-      align-items: center;
-      text-align: center;
-      z-index: 2;
-    }
-
-    .dash-title {
-      font-size: 10px;
-      text-transform: uppercase;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    /* GAUGE Styles */
-    .gauge-wrapper {
-      position: relative;
-      width: 140px; /* Smaller Gauge */
-      height: 70px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-    .gauge-arc {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      transform: rotate(-90deg);
-    }
-    .gauge-inner {
-      position: absolute;
-      top: 30px; left: 30px; width: 80px; height: 80px;
-      background: white; border-radius: 50%;
-      z-index: 2;
-    }
-
-    .arc-label {
-      position: absolute; top: 50%; left: 50%;
-      transform-origin: 0 0; width: 55px; /* Adjusted for smaller gauge */
-      text-align: right;
-      font-size: 9px; font-weight: 800; color: #fff;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-      pointer-events: none; z-index: 1;
-      display: flex; align-items: center; justify-content: flex-end;
-      opacity: 0; transition: opacity 0.5s;
-    }
+    /* GAUGE */
+    .gauge-wrapper { position: relative; width: 130px; height: 65px; overflow: hidden; margin: 0 auto; }
+    .gauge-arc { width: 130px; height: 130px; border-radius: 50%; transform: rotate(-90deg); }
+    .gauge-inner { position: absolute; top: 28px; left: 28px; width: 74px; height: 74px; background: white; border-radius: 50%; z-index: 2; }
+    .arc-label { position: absolute; top: 50%; left: 50%; transform-origin: 0 0; width: 52px; text-align: right; font-size: 9px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); z-index: 1; display: flex; align-items: center; justify-content: flex-end; opacity: 0; transition: opacity 0.5s; }
     .arc-label.visible { opacity: 1; }
 
-    .gauge-label {
-      margin-top: 5px;
-      font-size: 10px;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    /* COMPREHENSIVE LISTS */
-    .comp-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px; /* Tighter gap */
-      width: 100%;
-    }
-
-    .comp-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 8px;
-      border-radius: 8px;
-      background: #f8fafc;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .comp-item:hover {
-      background: #fff;
-      border-color: #e2e8f0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .ci-icon { font-size: 16px; width: 20px; text-align: center; }
+    /* DASHBOARD LISTS */
+    .comp-list { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+    .comp-item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 8px; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
+    .comp-item:hover { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .ci-info { flex-grow: 1; display: flex; flex-direction: column; gap: 2px; }
     .ci-name { font-size: 11px; font-weight: 700; color: var(--text-main); line-height: 1; }
-    
     .ci-bar-bg { width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden; }
     .ci-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
-    
-    .ci-pct { font-size: 10px; font-weight: 700; min-width: 25px; text-align: right; }
-
     .soaring .ci-bar-fill { background: var(--stat-i-border); }
-    .soaring .ci-pct { color: var(--stat-i-text); }
     .growing .ci-bar-fill { background: var(--stat-p-border); }
-    .growing .ci-pct { color: var(--stat-p-text); }
 
+    /* LEGEND Row */
+    .legend-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; flex-shrink: 0; }
+    .legend-box { border-radius: 8px; padding: 6px; text-align: center; border-top: 3px solid; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .l-title { font-weight: 800; font-size: 9px; margin-bottom: 2px; text-transform: uppercase; }
+    .l-desc { font-size: 8px; line-height: 1.1; opacity: 0.8; }
 
-    /* LEGEND */
-    .legend-row {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; flex-shrink: 0;
-    }
-    @media (max-width: 768px) { .legend-row { grid-template-columns: 1fr 1fr; } }
-
-    .legend-box {
-      border-radius: 8px; padding: 8px;
-      display: flex; flex-direction: column; align-items: center; text-align: center;
-      border-top: 3px solid; box-shadow: 0 2px 6px rgba(0,0,0,0.05); background: #fff;
-    }
-    .legend-box.np { background: var(--stat-np-bg); border-color: var(--stat-np-border); }
-    .legend-box.p  { background: var(--stat-p-bg); border-color: var(--stat-p-border); }
-    .legend-box.d  { background: var(--stat-d-bg); border-color: var(--stat-d-border); }
-    .legend-box.i  { background: var(--stat-i-bg); border-color: var(--stat-i-border); }
-
-    .l-visual { display: flex; gap: 3px; margin-bottom: 6px; }
-    .l-seg { width: 14px; height: 14px; border-radius: 3px; background: rgba(0,0,0,0.1); }
-    .legend-box.i .l-seg { background: var(--stat-i-border); }
-    .legend-box.d .l-seg:nth-child(1), .legend-box.d .l-seg:nth-child(2) { background: var(--stat-d-border); }
-    .legend-box.p .l-seg:nth-child(1) { background: var(--stat-p-border); }
-    .l-title { font-weight: 800; font-size: 10px; margin-bottom: 2px; text-transform: uppercase; }
-    .l-desc { font-size: 9px; line-height: 1.2; opacity: 0.8; }
-
-    /* ACCORDIONS CONTAINER (Scrollable area for bottom part) */
-    .goals-scroll-area {
-      flex-grow: 1;
-      overflow-y: auto;
-      border-radius: 12px;
-      /* Subtle scrollbar */
-      scrollbar-width: thin;
-      padding-right: 5px; 
-    }
+    /* SCROLLABLE AREA */
+    .goals-scroll-area { flex-grow: 1; overflow-y: auto; border-radius: 12px; scrollbar-width: thin; padding-right: 5px; }
 
     /* ACCORDIONS */
-    details.subject-card {
-      background: white; border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06); margin-bottom: 10px;
-      border: 1px solid rgba(0,0,0,0.05); overflow: visible;
-      transition: all 0.3s ease;
-      scroll-margin-top: 10px;
-    }
-    summary {
-      list-style: none; padding: 12px 16px; background: var(--head-bg); cursor: pointer;
-      display: flex; align-items: center; justify-content: space-between; gap: 15px;
-      border-radius: 12px; transition: border-radius 0.2s;
-    }
-    details[open] summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    details.subject-card { background: white; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s; }
+    summary { list-style: none; padding: 10px 14px; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-radius: 12px; }
     summary::-webkit-details-marker { display: none; }
-    summary:hover { background: #fdfdfd; }
-    
     .summary-left { display: flex; align-items: center; gap: 10px; }
-    .summary-icon { font-size: 20px; }
-    .summary-title { font-size: 14px; font-weight: 700; color: var(--head-text); }
+    .summary-title { font-size: 13px; font-weight: 700; }
+    .summary-right-group { display: flex; align-items: center; gap: 12px; }
+    .mini-stack { width: 100px; height: 7px; background: #f1f5f9; border-radius: 4px; display: flex; overflow: hidden; }
+    .ms-seg { height: 100%; transition: width 0.6s ease; }
+    .ms-seg.i { background: var(--stat-i-border); } .ms-seg.d { background: var(--stat-d-border); } .ms-seg.p { background: var(--stat-p-border); } .ms-seg.np { background: #cbd5e1; }
+    .accordion-icon { color: var(--text-muted); transition: transform 0.3s; display: flex; }
+    details[open] .accordion-icon { transform: rotate(180deg); }
+
+    .card-body { padding: 0 14px 14px 14px; border-top: 1px solid #f0f0f0; animation: slideDown 0.3s ease; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; } }
+    .goal-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #eee; align-items: flex-start; }
+    .goal-row:last-child { border-bottom: none; }
+    .progress-track { flex-shrink: 0; display: flex; gap: 2px; padding: 2px; background: rgba(0,0,0,0.03); border-radius: 5px; }
+    .seg { width: 9px; height: 16px; border-radius: 2px; background: #e2e8f0; transition: background 0.4s; }
+    .p .seg:nth-child(1) { background: var(--stat-p-border); }
+    .d .seg:nth-child(1), .d .seg:nth-child(2) { background: var(--stat-d-border); }
+    .i .seg:nth-child(1), .i .seg:nth-child(2), .i .seg:nth-child(3) { background: var(--stat-i-border); }
+    .goal-level-label { font-size: 8px; font-weight: 800; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-bottom: 2px; }
+    .goal-text { font-size: 11px; font-weight: 600; line-height: 1.3; }
+    .improved-badge { font-size: 8px; background: #dcfce7; color: #166534; padding: 1px 4px; border-radius: 3px; font-weight: 700; margin-left: 5px; }
     
-    .summary-right-group {
-      display: flex; align-items: center; gap: 15px;
-    }
-
-    .summary-stats {
-      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
-      min-width: 140px; position: relative; cursor: help;
-    }
-    .summary-label { font-size: 9px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); }
-
-    /* Accordion Caret Icon */
-    .accordion-icon {
-      color: var(--text-muted);
-      transition: transform 0.3s ease;
-      display: flex;
-      align-items: center;
-    }
-    details[open] .accordion-icon {
-      transform: rotate(180deg);
-    }
-
-    /* Stack Bars in Header */
-    .mini-stack {
-      width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px;
-      display: flex; overflow: hidden;
-    }
-    .ms-seg { height: 100%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-    .ms-seg.i { background: var(--stat-i-border); }
-    .ms-seg.d { background: var(--stat-d-border); }
-    .ms-seg.p { background: var(--stat-p-border); }
-    .ms-seg.np{ background: #cbd5e1; }
-
-    .tooltip {
-      visibility: hidden; width: 180px; background-color: #334155; color: #fff; text-align: center;
-      border-radius: 6px; padding: 8px; position: absolute; z-index: 999;
-      bottom: 120%; left: 50%; margin-left: -90px; font-size: 10px; line-height: 1.4;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25); opacity: 0; transition: opacity 0.2s, bottom 0.2s; pointer-events: none;
-    }
-    .tooltip::after {
-      content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
-      border-width: 5px; border-style: solid; border-color: #334155 transparent transparent transparent;
-    }
-    .summary-stats:hover .tooltip { visibility: visible; opacity: 1; bottom: 125%; }
-
-    .card-body {
-      padding: 0 16px 16px 16px; border-top: 1px solid #f0f0f0; background: #fff;
-      animation: slideDown 0.3s ease-out; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
-    }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-    .goal-row {
-      display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px dashed #eee;
-    }
-    .goal-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .goal-row:first-child { padding-top: 16px; }
-
-    .progress-track {
-      flex-shrink: 0; display: flex; flex-direction: column; gap: 3px; margin-top: 3px;
-    }
-    .track-pill {
-      display: flex; gap: 2px; background: rgba(0,0,0,0.03); padding: 3px;
-      border-radius: 6px; border: 1px solid rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-    }
-    .seg {
-      width: 10px; height: 18px; border-radius: 3px; background: #e2e8f0;
-      transition: background-color 0.6s ease;
-    }
-
-    .track-pill.p .seg:nth-child(1) { background: var(--stat-p-border); }
-    .track-pill.d .seg:nth-child(1), .track-pill.d .seg:nth-child(2) { background: var(--stat-d-border); }
-    .track-pill.i .seg:nth-child(1), .track-pill.i .seg:nth-child(2), .track-pill.i .seg:nth-child(3) { background: var(--stat-i-border); }
-
-    .goal-content { flex-grow: 1; }
-    .goal-level-label {
-      font-size: 9px; font-weight: 800; text-transform: uppercase;
-      margin-bottom: 2px; display: inline-block; letter-spacing: 0.5px;
-      padding: 2px 6px; border-radius: 4px;
-      transition: all 0.3s ease;
-    }
-    
-    .l-i { color: var(--stat-i-text); background: var(--stat-i-bg); }
-    .l-d { color: var(--stat-d-text); background: var(--stat-d-bg); }
-    .l-p { color: var(--stat-p-text); background: var(--stat-p-bg); }
-    .l-np{ color: var(--stat-np-text); background: var(--stat-np-bg); }
-
-    .goal-text {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.4;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      color: var(--text-muted);
-      font-size: 12px;
-    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .footer { text-align: center; font-size: 9px; padding: 15px 0; color: var(--text-muted); }
   </style>
 </head>
 <body>
 
 <div class="container">
-  
   <header>
     <div class="title-card">
-      <!-- SVG Tree -->
       <svg class="tree-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M50 15C50 15 65 30 65 45C65 55 60 60 50 60C40 60 35 55 35 45C35 30 50 15 50 15Z" fill="#86efac"/>
         <path d="M50 5C50 5 70 25 70 45C70 60 60 70 50 70C40 70 30 60 30 45C30 25 50 5 50 5Z" fill="#4ade80" fill-opacity="0.6"/>
         <rect x="45" y="70" width="10" height="25" rx="2" fill="#8d6e63"/>
-        <path d="M50 70C50 70 35 60 30 45C25 30 35 15 50 10" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-opacity="0.1"/>
+        <path d="M50 70C50 70 35 60 30 45C25 30 35 15 50 10" stroke="#166534" stroke-width="2" stroke-opacity="0.1"/>
       </svg>
-
       <div class="header-text-col">
         <h1>GROWING INDEPENDENCE</h1>
         <div class="header-subtext">Rooted in Strength, Reaching for the Sky</div>
@@ -484,46 +191,25 @@
     </div>
   </header>
 
-  <!-- CONTROL TOGGLES -->
   <div class="controls-wrapper">
     <div class="tri-controls">
-      <button class="tri-btn active" onclick="updateView(1)">Tri 1</button>
-      <button class="tri-btn" onclick="updateView(2)">Tri 2</button>
-      <button class="tri-btn" onclick="updateView(3)">Tri 3</button>
+      <button class="tri-btn active" id="btn-1" onclick="updateView(1)">Tri 1</button>
+      <button class="tri-btn" id="btn-2" onclick="updateView(2)">Tri 2</button>
+      <button class="tri-btn" id="btn-3" onclick="updateView(3)">Tri 3</button>
     </div>
   </div>
 
   <div class="dashboard-container">
-    
-    <!-- T3 BANNER (Only Shows in Tri 3) -->
-    <div class="t3-banner" id="t3-banner">
-      <div style="font-size:18px;">🎉</div>
-      <div class="banner-stat">
-        <span class="bn-val" id="bn-met">0</span>
-        <span class="bn-lbl">Mastered</span>
-      </div>
-      <div class="banner-stat">
-        <span class="bn-val" id="bn-up">0</span>
-        <span class="bn-lbl">Improved</span>
-      </div>
-      <div style="font-size:18px;">🚀</div>
-    </div>
-
-    <!-- MAIN DASHBOARD -->
+    <div class="status-banner" id="status-banner"></div>
     <div class="dashboard-summary">
-      
-      <!-- LEFT: GROWTH AREAS -->
       <div class="dash-card growing">
         <div class="dash-title" style="color:var(--stat-p-text)">PRACTICING</div>
         <div class="comp-list" id="list-growing"></div>
       </div>
-
-      <!-- CENTER: ARC -->
       <div class="dash-card center-card">
-        <div class="dash-title" id="dash-tri-label">Goal Distribution</div>
+        <div class="dash-title" id="dash-tri-label">Distribution</div>
         <div class="gauge-wrapper">
           <div class="gauge-arc" id="gauge-arc"></div>
-          <!-- Labels adjusted for smaller gauge radius ~70px -->
           <div class="arc-label" id="lbl-np">NP</div>
           <div class="arc-label" id="lbl-p">P</div>
           <div class="arc-label" id="lbl-d">D</div>
@@ -531,366 +217,156 @@
           <div class="gauge-inner"></div>
         </div>
         <div class="gauge-label">
-          <span style="color:#cbd5e1">●</span> NP 
-          <span style="color:#fde047">●</span> P 
-          <span style="color:#93c5fd">●</span> D 
-          <span style="color:#86efac">●</span> I
+          <span style="color:#cbd5e1">●</span> NP <span style="color:#fde047">●</span> P <span style="color:#93c5fd">●</span> D <span style="color:#86efac">●</span> I
         </div>
       </div>
-
-      <!-- RIGHT: STRONG AREAS -->
       <div class="dash-card soaring">
         <div class="dash-title" style="color:var(--stat-i-text)">INDEPENDENTLY APPLYING</div>
         <div class="comp-list" id="list-soaring"></div>
       </div>
-
     </div>
   </div>
 
   <div class="legend-row">
-    <div class="legend-box np">
-      <div class="l-visual"><div class="l-seg" style="background:#e2e8f0"></div><div class="l-seg" style="background:#e2e8f0"></div><div class="l-seg" style="background:#e2e8f0"></div></div>
-      <div class="l-title" style="color:var(--stat-np-text)">Not Presented</div>
+    <div class="legend-box np" style="border-color:var(--stat-np-border)">
+      <div class="l-title">Not Presented</div>
       <div class="l-desc">Not yet introduced.</div>
     </div>
-    <div class="legend-box p">
-      <div class="l-visual"><div class="l-seg" style="background:var(--stat-p-border)"></div><div class="l-seg" style="background:#e2e8f0"></div><div class="l-seg" style="background:#e2e8f0"></div></div>
-      <div class="l-title" style="color:var(--stat-p-text)">Practicing</div>
-      <div class="l-desc">1/3 Independence. Needs guidance.</div>
+    <div class="legend-box p" style="border-color:var(--stat-p-border)">
+      <div class="l-title">Practicing</div>
+      <div class="l-desc">1/3 Independence.</div>
     </div>
-    <div class="legend-box d">
-      <div class="l-visual"><div class="l-seg" style="background:var(--stat-d-border)"></div><div class="l-seg" style="background:var(--stat-d-border)"></div><div class="l-seg" style="background:#e2e8f0"></div></div>
-      <div class="l-title" style="color:var(--stat-d-text)">Demonstrating</div>
-      <div class="l-desc">2/3 Independence. Occasional support.</div>
+    <div class="legend-box d" style="border-color:var(--stat-d-border)">
+      <div class="l-title">Demonstrating</div>
+      <div class="l-desc">2/3 Independence.</div>
     </div>
-    <div class="legend-box i">
-      <div class="l-visual"><div class="l-seg" style="background:var(--stat-i-border)"></div><div class="l-seg" style="background:var(--stat-i-border)"></div><div class="l-seg" style="background:var(--stat-i-border)"></div></div>
-      <div class="l-title" style="color:var(--stat-i-text)">Independently Applying</div>
-      <div class="l-desc">Full Independence. Mastery!</div>
+    <div class="legend-box i" style="border-color:var(--stat-i-border)">
+      <div class="l-title">Independent</div>
+      <div class="l-desc">Full Independence.</div>
     </div>
   </div>
 
   <div class="goals-scroll-area">
     <div id="accordionsTarget"></div>
-    <div class="footer">
-      Data represents teacher observations for 2025–2026 school year.
-    </div>
+    <div class="footer">Data represents teacher observations for 2025–2026 school year.</div>
   </div>
-
 </div>
 
 <script>
-  // -------------------------------------------------------------
-  // DATA
-  // -------------------------------------------------------------
   const goals = [
-      {subject:"Mathematics", teacher:"Leah Wolfendale", goal:"Base-ten: break up 3-digit numbers into hundreds/tens/ones; state digit value", tri1:"D", tri2:"D", tri3:"I"},
-      {subject:"Mathematics", teacher:"Leah Wolfendale", goal:"Read, write, and compare numbers up to 100", tri1:"D", tri2:"I", tri3:"I"},
-      {subject:"Mathematics", teacher:"Leah Wolfendale", goal:"Use strategies to practice addition/subtraction fact fluency", tri1:"I", tri2:"I", tri3:"I"},
-      {subject:"Mathematics", teacher:"Leah Wolfendale", goal:"Follow a teacher model + guided steps to add/subtract within 100", tri1:"NP", tri2:"P", tri3:"D"},
-      {subject:"Mathematics", teacher:"Leah Wolfendale", goal:"Represent multiplication/division of the x2 fact family using models", tri1:"NP", tri2:"P", tri3:"D"},
-      {subject:"Mathematics", teacher:"Leah Wolfendale", goal:"Solve single-step add/subtract word problems within 100 (teacher-led steps)", tri1:"P", tri2:"D", tri3:"I"},
-
-      {subject:"English Language Arts", teacher:"Leah Wolfendale", goal:"Copy lowercase/uppercase print letters legibly (structured paper + model)", tri1:"P", tri2:"P", tri3:"D"},
-      {subject:"English Language Arts", teacher:"Leah Wolfendale", goal:"Identify/define basic parts of speech within an expanded kernel sentence", tri1:"D", tri2:"D", tri3:"I"},
-      {subject:"English Language Arts", teacher:"Leah Wolfendale", goal:"Write 1 sentence (article+noun+verb+where phrase) with prompt + template", tri1:"P", tri2:"D", tri3:"D"},
-      {subject:"English Language Arts", teacher:"Leah Wolfendale", goal:"Identify and produce a variety of sentence types in speaking/writing", tri1:"NP", tri2:"P", tri3:"D"},
-      {subject:"English Language Arts", teacher:"Leah Wolfendale", goal:"Write narrative/informational/opinion paragraphs collaboratively (organizers)", tri1:"P", tri2:"P", tri3:"D"},
-      {subject:"English Language Arts", teacher:"Leah Wolfendale", goal:"Apply capitalization/punctuation rules in isolated exercises (scaffolded)", tri1:"P", tri2:"D", tri3:"D"},
-
-      {subject:"Science/SS Study Skills", teacher:"Leah Wolfendale", goal:"Collaboratively identify essential terms and vocabulary", tri1:"I", tri2:"I", tri3:"I"},
-      {subject:"Science/SS Study Skills", teacher:"Leah Wolfendale", goal:"Develop typing skills (letters and short words/phrases)", tri1:"I", tri2:"I", tri3:"I"},
-      {subject:"Science/SS Study Skills", teacher:"Leah Wolfendale", goal:"Teacher-guided note-taking process (two-column notes)", tri1:"P", tri2:"D", tri3:"D"},
-      {subject:"Science/SS Study Skills", teacher:"Leah Wolfendale", goal:"Identify components of a map in guided class exercises", tri1:"NP", tri2:"P", tri3:"D"},
-
-      {subject:"E.C.O.", teacher:"Leah Wolfendale", goal:"Recognize/identify/name a range of human emotions (basic → sophisticated)", tri1:"I", tri2:"I", tri3:"I"},
-      {subject:"E.C.O.", teacher:"Leah Wolfendale", goal:"Explain the concept of a growth mindset", tri1:"D", tri2:"I", tri3:"I"},
-      {subject:"E.C.O.", teacher:"Leah Wolfendale", goal:"Keep school materials intact and organized (visual model/checklist)", tri1:"D", tri2:"D", tri3:"I"},
-      {subject:"E.C.O.", teacher:"Leah Wolfendale", goal:"Understand expected/unexpected behaviors during structured activities", tri1:"I", tri2:"I", tri3:"I"},
-
-      {subject:"Specialized Support", teacher:"Various", goal:"OT: Draw a recognizable picture with 12+ details", tri1:"P", tri2:"P", tri3:"D"},
-      {subject:"Specialized Support", teacher:"Various", goal:"OT: Motor planning/sequencing (3-4 step project)", tri1:"P", tri2:"D", tri3:"D"},
-      {subject:"Specialized Support", teacher:"Various", goal:"Counseling: Use strategies to manage uncertainty", tri1:"P", tri2:"D", tri3:"D"},
-      {subject:"Specialized Support", teacher:"Various", goal:"Speech: Produce /v/ sound in all word positions", tri1:"D", tri2:"I", tri3:"I"},
-      {subject:"Specialized Support", teacher:"Various", goal:"Speech: Auditory discrimination for similar sounds", tri1:"P", tri2:"D", tri3:"D"},
-
-      {subject:"Active Learning", teacher:"Griffin Li", goal:"Participate appropriately in games requiring whole body movements", tri1:"D", tri2:"I", tri3:"I"},
-      {subject:"Active Learning", teacher:"Griffin Li", goal:"Positively communicate and collaborate with teammates", tri1:"I", tri2:"I", tri3:"I"},
-      {subject:"Active Learning", teacher:"Griffin Li", goal:"Outdoor: Understand movement concepts/strategies", tri1:"I", tri2:"I", tri3:"I"},
-      {subject:"Active Learning", teacher:"Griffin Li", goal:"Outdoor: Exhibit safe and responsible behavior", tri1:"I", tri2:"I", tri3:"I"},
+    {subject:"Mathematics", goal:"Base-ten: break up 3-digit numbers into hundreds/tens/ones", tri1:"D", tri2:"D", tri3:"I"},
+    {subject:"Mathematics", goal:"Read, write, and compare numbers up to 100", tri1:"D", tri2:"I", tri3:"I"},
+    {subject:"Mathematics", goal:"Use strategies to practice addition/subtraction fact fluency", tri1:"I", tri2:"I", tri3:"I"},
+    {subject:"Mathematics", goal:"Follow guided steps to add/subtract within 100", tri1:"NP", tri2:"P", tri3:"D"},
+    {subject:"Mathematics", goal:"Solve single-step add/subtract word problems", tri1:"P", tri2:"D", tri3:"I"},
+    {subject:"English Language Arts", goal:"Copy lowercase/uppercase print letters legibly", tri1:"P", tri2:"P", tri3:"D"},
+    {subject:"English Language Arts", goal:"Identify/define basic parts of speech", tri1:"D", tri2:"D", tri3:"I"},
+    {subject:"English Language Arts", goal:"Write 1 sentence with prompt + template", tri1:"P", tri2:"D", tri3:"D"},
+    {subject:"English Language Arts", goal:"Produce a variety of sentence types", tri1:"NP", tri2:"P", tri3:"D"},
+    {subject:"English Language Arts", goal:"Apply capitalization/punctuation rules", tri1:"P", tri2:"D", tri3:"D"},
+    {subject:"Science/SS Study Skills", goal:"Collaboratively identify essential vocabulary", tri1:"I", tri2:"I", tri3:"I"},
+    {subject:"Science/SS Study Skills", goal:"Develop typing skills (letters and short words)", tri1:"I", tri2:"I", tri3:"I"},
+    {subject:"Science/SS Study Skills", goal:"Teacher-guided note-taking process", tri1:"P", tri2:"D", tri3:"D"},
+    {subject:"E.C.O.", goal:"Recognize/identify a range of human emotions", tri1:"I", tri2:"I", tri3:"I"},
+    {subject:"E.C.O.", goal:"Explain the concept of a growth mindset", tri1:"D", tri2:"I", tri3:"I"},
+    {subject:"E.C.O.", goal:"Keep school materials intact and organized", tri1:"D", tri2:"D", tri3:"I"},
+    {subject:"Active Learning", goal:"Positively communicate and collaborate with teammates", tri1:"I", tri2:"I", tri3:"I"},
+    {subject:"Active Learning", goal:"Exhibit safe and responsible behavior", tri1:"I", tri2:"I", tri3:"I"}
   ];
 
   const STATUS_CONFIG = {
-    "I":  { class: "i", label: "Blooming", score: 3 },
-    "D":  { class: "d", label: "Demonstrating", score: 2 },
-    "P":  { class: "p", label: "Practicing", score: 1 },
+    "I": { class: "i", label: "Blooming", score: 3 },
+    "D": { class: "d", label: "Demonstrating", score: 2 },
+    "P": { class: "p", label: "Practicing", score: 1 },
     "NP": { class: "np", label: "Not Presented", score: 0 }
   };
 
   const SUBJECT_CONFIG = {
-    "Mathematics": { icon: "🧮" },
-    "English Language Arts": { icon: "📖" },
-    "Science/SS Study Skills": { icon: "🌍" },
-    "E.C.O.": { icon: "🌱" },
-    "Specialized Support": { icon: "🤝" },
+    "Mathematics": { icon: "🧮" }, "English Language Arts": { icon: "📖" },
+    "Science/SS Study Skills": { icon: "🌍" }, "E.C.O.": { icon: "🌱" },
     "Active Learning": { icon: "⚽" }
   };
-
-  function getStatus(val) {
-    return STATUS_CONFIG[val] || STATUS_CONFIG["NP"];
-  }
 
   let currentTri = 1;
   let isInitialized = false;
 
   function updateView(t) {
     currentTri = t;
-    document.querySelectorAll('.tri-btn').forEach((btn, idx) => {
-      btn.classList.toggle('active', (idx + 1) === t);
-    });
+    document.querySelectorAll('.tri-btn').forEach((btn, idx) => { btn.classList.toggle('active', (idx + 1) === t); });
     renderReport();
   }
 
-  // Keyboard and Mouse Event Listeners
   document.addEventListener('keydown', (e) => {
-    if(e.key === "ArrowRight" && currentTri < 3) updateView(currentTri + 1);
-    if(e.key === "ArrowLeft" && currentTri > 1) updateView(currentTri - 1);
+    if(e.key === "ArrowRight") updateView(currentTri >= 3 ? 1 : currentTri + 1);
+    if(e.key === "ArrowLeft") updateView(currentTri <= 1 ? 3 : currentTri - 1);
   });
-
-  document.addEventListener('dblclick', (e) => {
-    if(e.target.closest('button') || e.target.closest('summary')) return;
-    const next = currentTri >= 3 ? 1 : currentTri + 1;
-    updateView(next);
-  });
-
-  function scrollToSubject(id) {
-    const el = document.getElementById(id);
-    if(el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.open = true; // ensure it's open
-    }
-  }
 
   function renderReport() {
     const grouped = {};
-    let totalGoals = 0, totalNP = 0, totalP = 0, totalD = 0, totalI = 0;
-    let improvedCount = 0, metCount = 0;
-
+    let totalNP=0, totalP=0, totalD=0, totalI=0, improved=0, mastered=0;
     goals.forEach((g, idx) => {
       g.id = idx;
-      if(!grouped[g.subject]) grouped[g.subject] = { items: [], index: Object.keys(grouped).length };
+      if(!grouped[g.subject]) grouped[g.subject] = { items: [] };
       grouped[g.subject].items.push(g);
-      totalGoals++;
-
-      const sKey = g[`tri${currentTri}`];
-      const scoreCurrent = getStatus(sKey).score;
-      const scoreStart = getStatus(g.tri1).score;
-      
-      if(currentTri > 1 && scoreCurrent > scoreStart) improvedCount++;
-      if(sKey === "I") metCount++;
-
-      if(sKey === "I") totalI++;
-      else if(sKey === "D") totalD++;
-      else if(sKey === "P") totalP++;
-      else totalNP++;
+      const val = g[`tri${currentTri}`];
+      if(val==="I") { totalI++; mastered++; } else if(val==="D") totalD++; else if(val==="P") totalP++; else totalNP++;
+      if(currentTri > 1 && STATUS_CONFIG[val].score > STATUS_CONFIG[g.tri1].score) improved++;
     });
 
-    const degNP = (totalNP / totalGoals) * 180;
-    const degP  = (totalP  / totalGoals) * 180;
-    const degD  = (totalD  / totalGoals) * 180;
-    const degI  = (totalI  / totalGoals) * 180;
+    const total = goals.length;
+    const banner = document.getElementById("status-banner");
+    banner.className = `status-banner banner-t${currentTri}`;
+    if(currentTri === 1) banner.innerHTML = `<div class="banner-stat"><span class="bn-val">🏁</span><span class="bn-lbl">Baseline</span></div><div class="banner-stat"><span class="bn-val">${total}</span><span class="bn-lbl">Total Goals</span></div>`;
+    else if(currentTri === 2) banner.innerHTML = `<div class="banner-stat"><span class="bn-val">📈</span><span class="bn-lbl">Progress</span></div><div class="banner-stat"><span class="bn-val">+${improved}</span><span class="bn-lbl">Improvements</span></div>`;
+    else banner.innerHTML = `<div class="banner-stat"><span class="bn-val">🎉</span><span class="bn-lbl">Year End</span></div><div class="banner-stat"><span class="bn-val">${mastered}</span><span class="bn-lbl">Mastered</span></div><div class="banner-stat"><span class="bn-val">+${improved}</span><span class="bn-lbl">Growth</span></div>`;
 
-    // Stops
-    const s1 = degNP;
-    const s2 = s1 + degP;
-    const s3 = s2 + degD;
-    
-    // Labels Rotation
-    const rotNP = -90 + (degNP/2), rotP = -90 + degNP + (degP/2), rotD = -90 + degNP + degP + (degD/2), rotI = -90 + degNP + degP + degD + (degI/2);
-
-    // Calculate Strengths & Growth Areas
-    const subjectsArr = Object.keys(grouped).map((subj, idx) => {
-      const { items } = grouped[subj];
-      let i=0, d=0, p=0, np=0;
-      items.forEach(g => {
-        const k = g[`tri${currentTri}`];
-        if(k==="I") i++; else if(k==="D") d++; else if(k==="P") p++; else np++;
-      });
-      const total = items.length;
-      return { 
-        name: subj, icon: SUBJECT_CONFIG[subj]?.icon || "📂",
-        percentInd: Math.round(((i+d)/total)*100),
-        score: (i*2) + (d*1),
-        accId: `acc-subj-${idx}`
-      };
-    });
-
-    const topStrengths = [...subjectsArr].sort((a,b) => b.score - a.score).slice(0, 3);
-    const topGrowth = [...subjectsArr].sort((a,b) => b.score - a.score).slice(3, 6);
-
-    // 2. Update Dashboard DOM elements
-    // We update specific elements by ID instead of re-rendering the whole dashboard container
-    
-    // T3 Banner
-    const banner = document.getElementById("t3-banner");
-    if(currentTri === 3) {
-      banner.classList.add('visible');
-      document.getElementById('bn-met').textContent = metCount;
-      document.getElementById('bn-up').textContent = `+${improvedCount}`;
-    } else {
-      banner.classList.remove('visible');
-    }
-    
-    // Lists
-    document.getElementById("list-soaring").innerHTML = topStrengths.map(s => `
-      <div class="comp-item" onclick="scrollToSubject('${s.accId}')">
-        <span class="ci-icon">${s.icon}</span>
-        <div class="ci-info">
-          <span class="ci-name">${s.name}</span>
-          <div class="ci-bar-bg"><div class="ci-bar-fill" style="width:${s.percentInd}%"></div></div>
-        </div>
-        <span class="ci-pct">${s.percentInd}%</span>
-      </div>
-    `).join("");
-
-    document.getElementById("list-growing").innerHTML = topGrowth.map(s => `
-      <div class="comp-item" onclick="scrollToSubject('${s.accId}')">
-        <span class="ci-icon">${s.icon}</span>
-        <div class="ci-info">
-          <span class="ci-name">${s.name}</span>
-          <div class="ci-bar-bg"><div class="ci-bar-fill" style="width:${s.percentInd}%"></div></div>
-        </div>
-        <span class="ci-pct">${s.percentInd}%</span>
-      </div>
-    `).join("");
-
-    // Gauge Arc
     const arc = document.getElementById("gauge-arc");
-    arc.style.background = `conic-gradient(
-      var(--stat-np-border) 0deg ${s1}deg,
-      var(--stat-p-border) ${s1}deg ${s2}deg,
-      var(--stat-d-border) ${s2}deg ${s3}deg,
-      var(--stat-i-border) ${s3}deg 180deg,
-      transparent 180deg
-    )`;
-    document.getElementById("dash-tri-label").textContent = `Goal Distribution (Tri ${currentTri})`;
+    const dNP = (totalNP/total)*180, dP = (totalP/total)*180, dD = (totalD/total)*180;
+    arc.style.background = `conic-gradient(var(--stat-np-border) 0 ${dNP}deg, var(--stat-p-border) ${dNP}deg ${dNP+dP}deg, var(--stat-d-border) ${dNP+dP}deg ${dNP+dP+dD}deg, var(--stat-i-border) ${dNP+dP+dD}deg 180deg, transparent 180deg)`;
 
-    // Gauge Labels
-    function setLbl(id, deg, show) {
-      const el = document.getElementById(id);
-      if(show) {
-        el.classList.add('visible');
-        el.style.transform = `rotate(${deg}deg) translateX(55px) rotate(${-deg}deg)`;
-      } else {
-        el.classList.remove('visible');
-      }
-    }
-    setLbl('lbl-np', rotNP, degNP > 8);
-    setLbl('lbl-p', rotP, degP > 8);
-    setLbl('lbl-d', rotD, degD > 8);
-    setLbl('lbl-i', rotI, degI > 8);
+    const setL = (id, deg, show) => { const el = document.getElementById(id); el.classList.toggle('visible', show); if(show) el.style.transform = `rotate(${deg}deg) translateX(52px) rotate(${-deg}deg)`; };
+    setL('lbl-np', -90 + dNP/2, dNP > 10); setL('lbl-p', -90 + dNP + dP/2, dP > 10); setL('lbl-d', -90 + dNP + dP + dD/2, dD > 10); setL('lbl-i', -90 + dNP + dP + dD + (180-(dNP+dP+dD))/2, (180-(dNP+dP+dD)) > 10);
 
+    const subjects = Object.keys(grouped).map((s, i) => {
+      const items = grouped[s].items;
+      let score = 0; items.forEach(g => score += STATUS_CONFIG[g[`tri${currentTri}`]].score);
+      return { name: s, score, icon: SUBJECT_CONFIG[s].icon, pct: Math.round((items.filter(g => g[`tri${currentTri}`] === "I" || g[`tri${currentTri}`] === "D").length / items.length) * 100), id: i };
+    });
 
-    // 3. Update Accordions
-    // Generate HTML for accordions ONLY if not initialized
-    if (!isInitialized) {
-      let accHtml = "";
-      Object.keys(grouped).forEach((subject, sIdx) => {
-        const { items } = grouped[subject];
-        const icon = SUBJECT_CONFIG[subject]?.icon || "📂";
-        
-        let rows = items.map(g => `
-          <div class="goal-row">
-            <div class="progress-track">
-              <div id="gp-${g.id}" class="track-pill">
-                <div class="seg"></div><div class="seg"></div><div class="seg"></div>
-              </div>
-            </div>
-            <div class="goal-content">
-              <div class="goal-level-label" id="gl-${g.id}"></div>
-              <span id="gb-${g.id}"></span>
-              <div class="goal-text">${g.goal}</div>
-            </div>
-          </div>
-        `).join("");
+    const sortS = [...subjects].sort((a,b) => b.score - a.score);
+    document.getElementById("list-soaring").innerHTML = sortS.slice(0, 3).map(s => `<div class="comp-item"><span class="ci-name">${s.icon} ${s.name}</span><div class="ci-info"><div class="ci-bar-bg"><div class="ci-bar-fill" style="width:${s.pct}%"></div></div></div></div>`).join("");
+    document.getElementById("list-growing").innerHTML = sortS.slice(-3).reverse().map(s => `<div class="comp-item"><span class="ci-name">${s.icon} ${s.name}</span><div class="ci-info"><div class="ci-bar-bg"><div class="ci-bar-fill" style="width:${s.pct}%"></div></div></div></div>`).join("");
 
-        accHtml += `
-          <details class="subject-card" id="acc-subj-${sIdx}">
-            <summary>
-              <div class="summary-left">
-                <span class="summary-icon">${icon}</span>
-                <span class="summary-title">${subject}</span>
-              </div>
-              
-              <div class="summary-right-group">
-                <div class="summary-stats">
-                  <span class="summary-label" id="sl-${sIdx}">Snapshot</span>
-                  <div class="mini-stack" id="ss-${sIdx}">
-                    <div class="ms-seg np" style="width:0%"></div>
-                    <div class="ms-seg p" style="width:0%"></div>
-                    <div class="ms-seg d" style="width:0%"></div>
-                    <div class="ms-seg i" style="width:0%"></div>
-                  </div>
-                  <div class="tooltip">
-                    <div style="font-weight:700;margin-bottom:4px">Snapshot</div>
-                    <div style="font-weight:400; opacity:0.9">
-                      <span style="color:#cbd5e1">●</span> NP 
-                      <span style="color:#fde047">●</span> P 
-                      <span style="color:#93c5fd">●</span> D 
-                      <span style="color:#86efac">●</span> I
-                    </div>
-                  </div>
-                </div>
-                <!-- Caret Icon -->
-                <div class="accordion-icon">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </div>
-              </div>
-
-            </summary>
-            <div class="card-body">${rows}</div>
-          </details>
-        `;
+    if(!isInitialized) {
+      let html = "";
+      Object.keys(grouped).forEach((s, idx) => {
+        const items = grouped[s].items;
+        let rows = items.map(g => `<div class="goal-row"><div class="progress-track" id="tr-${g.id}"><div class="seg"></div><div class="seg"></div><div class="seg"></div></div><div class="goal-content"><div class="goal-level-label" id="lb-${g.id}"></div><div class="goal-text">${g.goal}</div></div></div>`).join("");
+        html += `<details class="subject-card"><summary><div class="summary-left"><span>${SUBJECT_CONFIG[s].icon}</span><span class="summary-title">${s}</span></div><div class="summary-right-group"><div class="mini-stack" id="ms-${idx}"><div class="ms-seg np"></div><div class="ms-seg p"></div><div class="ms-seg d"></div><div class="ms-seg i"></div></div><div class="accordion-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div></summary><div class="card-body">${rows}</div></details>`;
       });
-      document.getElementById("accordionsTarget").innerHTML = accHtml;
+      document.getElementById("accordionsTarget").innerHTML = html;
       isInitialized = true;
     }
 
-    // Now update existing DOM elements for accordions (runs every time)
-    Object.keys(grouped).forEach((subject, sIdx) => {
-      const { items } = grouped[subject];
-      const total = items.length;
-      let cI=0, cD=0, cP=0, cNP=0;
+    Object.keys(grouped).forEach((s, idx) => {
+      const items = grouped[s].items;
+      let cNP=0, cP=0, cD=0, cI=0;
       items.forEach(g => {
-        const k = g[`tri${currentTri}`];
-        if(k==="I") cI++; else if(k==="D") cD++; else if(k==="P") cP++; else cNP++;
+        const v = g[`tri${currentTri}`], st = STATUS_CONFIG[v];
+        if(v==="I") cI++; else if(v==="D") cD++; else if(v==="P") cP++; else cNP++;
+        document.getElementById(`tr-${g.id}`).className = `progress-track ${st.class}`;
+        const lab = document.getElementById(`lb-${g.id}`);
+        lab.className = `goal-level-label l-${st.class}`;
+        lab.innerHTML = st.label + (currentTri > 1 && st.score > STATUS_CONFIG[g.tri1].score ? `<span class="improved-badge">UP ↗</span>` : "");
       });
-
-      const stack = document.getElementById(`ss-${sIdx}`);
-      if(stack) {
-        stack.querySelector('.np').style.width = `${(cNP/total)*100}%`;
-        stack.querySelector('.p').style.width = `${(cP/total)*100}%`;
-        stack.querySelector('.d').style.width = `${(cD/total)*100}%`;
-        stack.querySelector('.i').style.width = `${(cI/total)*100}%`;
-      }
-      document.getElementById(`sl-${sIdx}`).textContent = `Snapshot (Tri ${currentTri})`;
-
-      items.forEach(g => {
-        const val = g[`tri${currentTri}`];
-        const s = getStatus(val);
-        const improved = currentTri > 1 && getStatus(val).score > getStatus(g.tri1).score;
-
-        document.getElementById(`gp-${g.id}`).className = `track-pill ${s.class}`;
-        const lb = document.getElementById(`gl-${g.id}`);
-        lb.className = `goal-level-label l-${s.class}`;
-        lb.innerHTML = `${s.label} ${improved ? `<span class="improved-badge">UP ↗</span>` : ''}`;
-      });
+      const ms = document.getElementById(`ms-${idx}`);
+      ms.querySelector('.np').style.width = (cNP/items.length)*100 + "%";
+      ms.querySelector('.p').style.width = (cP/items.length)*100 + "%";
+      ms.querySelector('.d').style.width = (cD/items.length)*100 + "%";
+      ms.querySelector('.i').style.width = (cI/items.length)*100 + "%";
     });
   }
-
-  // Start
   updateView(1);
-
 </script>
 </body>
 </html>
