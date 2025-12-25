@@ -1,372 +1,1187 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Student Progress Report - Interactive</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>John Smith • Growth Journey 2025-2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-page: #f0f6f9;
-      --text-main: #2c3e50;
-      --text-muted: #586878;
-
-      /* Status Colors */
-      --stat-i-bg: #e1f6e7; --stat-i-border: #2ecc71; --stat-i-text: #1b7a43;
-      --stat-d-bg: #e3f0fc; --stat-d-border: #3498db; --stat-d-text: #205d86;
-      --stat-p-bg: #fff5d9; --stat-p-border: #f1c40f; --stat-p-text: #967a0a;
-      --stat-np-bg:#ebebeb; --stat-np-border:#95a5a6; --stat-np-text:#586364;
-
-      --head-bg: #ffffff;
-      --head-text: #2c3e50;
+      --bg-canvas: #faf9f7;
+      --bg-card: #ffffff;
+      --bg-elevated: #f5f4f2;
+      
+      --ink-primary: #1a1a1a;
+      --ink-secondary: #5c5c5c;
+      --ink-muted: #9a9a9a;
+      
+      --bloom-green: #22c55e;
+      --bloom-green-soft: #dcfce7;
+      --demo-blue: #3b82f6;
+      --demo-blue-soft: #dbeafe;
+      --practice-amber: #f59e0b;
+      --practice-amber-soft: #fef3c7;
+      --notyet-slate: #94a3b8;
+      --notyet-slate-soft: #f1f5f9;
+      
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      
+      --shadow-soft: 0 4px 24px -4px rgba(0,0,0,0.08);
+      --shadow-elevated: 0 12px 48px -12px rgba(0,0,0,0.12);
     }
-
-    * { box-sizing: border-box; }
-
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: var(--bg-canvas);
+      color: var(--ink-primary);
+      height: 100vh;
+      line-height: 1.5;
+      overflow: hidden;
+      padding: 0;
       margin: 0;
-      padding: 10px 15px;
-      font-family: "Quicksand", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg-page);
-      color: var(--text-main);
-      transition: background 0.5s;
-      user-select: none; 
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(34, 197, 94, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 90%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 12px 20px;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden; /* Main page doesn't scroll, inner area does */
+      overflow: hidden;
     }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      width: 100%;
-      height: 100%;
+    
+    /* Header */
+    .header {
       display: flex;
-      flex-direction: column;
-    }
-
-    /* HEADER - WIDE & COMPACT */
-    header {
-      text-align: center;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 16px;
       flex-shrink: 0;
     }
-
-    .title-card {
-      background: linear-gradient(180deg, #eef2f6 0%, #dae1e9 100%);
-      border: 2px solid white;
-      border-radius: 12px;
-      padding: 8px 30px;
-      box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.3), 0 4px 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 950px;
+    
+    .header-left {
       display: flex;
-      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .avatar-ring {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--bloom-green) 0deg 120deg,
+        var(--demo-blue) 120deg 200deg,
+        var(--practice-amber) 200deg 280deg,
+        var(--notyet-slate) 280deg 360deg
+      );
+      padding: 4px;
+      animation: spin-slow 20s linear infinite;
+    }
+    
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+    
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--bg-canvas);
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--ink-primary);
     }
-
-    .tree-icon { width: 36px; height: 36px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
-
-    .header-text-col { display: flex; flex-direction: column; align-items: flex-start; }
-
-    .top-pill {
-      background: rgba(255, 255, 255, 0.7);
-      color: #475569;
-      padding: 2px 8px;
-      border-radius: 99px;
+    
+    .header-title h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    
+    .header-subtitle {
+      font-size: 13px;
+      color: var(--ink-secondary);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .header-subtitle::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--bloom-green);
+    }
+    
+    /* Trimester Nav */
+    .trimester-nav {
+      display: flex;
+      background: var(--bg-card);
+      border-radius: 100px;
+      padding: 6px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    
+    .tri-btn {
+      position: relative;
+      border: none;
+      background: transparent;
+      padding: 12px 28px;
+      font-family: inherit;
+      font-size: 14px;
       font-weight: 700;
-      font-size: 9px;
+      color: var(--ink-muted);
+      cursor: pointer;
+      border-radius: 100px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .tri-btn:hover { color: var(--ink-secondary); }
+    
+    .tri-btn.active {
+      background: var(--ink-primary);
+      color: white;
+      box-shadow: 0 4px 16px -4px rgba(0,0,0,0.3);
+    }
+    
+    /* Main Content Layout */
+    .main-content {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 16px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    
+    @media (max-width: 1000px) {
+      .main-content { grid-template-columns: 1fr; }
+    }
+    
+    /* Right Column Layout */
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      padding-left: 56px;
+      min-height: 0;
+      overflow: hidden;
+    }
+    
+    @media (max-width: 1000px) {
+      .right-column { padding-left: 0; }
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+    }
+    
+    .progress-viz-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid rgba(0,0,0,0.04);
+      box-shadow: var(--shadow-soft);
+    }
+    
+    .viz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+    
+    .viz-title {
+      font-size: 13px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(255,255,255,0.8);
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+      font-weight: 700;
+    }
+    
+    .trimester-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-secondary);
+      background: var(--bg-elevated);
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
+    
+    /* Large Radial Progress */
+    .radial-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 20px;
+    }
+    
+    .radial-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: relative;
+    }
+    
+    .radial-center {
+      position: absolute;
+      inset: 30px;
+      background: var(--bg-card);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.03);
+    }
+    
+    .radial-percent {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--bloom-green);
+      line-height: 1;
+    }
+    
+    .radial-label {
+      font-size: 15px;
+      color: var(--ink-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    
+    /* Legend with Definitions */
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      transition: all 0.3s;
+    }
+    
+    .legend-item:hover {
+      transform: translateX(4px);
+      background: var(--bg-canvas);
+    }
+    
+    .legend-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 44px;
+    }
+    
+    .legend-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+    
+    .legend-dot.i { background: var(--bloom-green); }
+    .legend-dot.d { background: var(--demo-blue); }
+    .legend-dot.p { background: var(--practice-amber); }
+    .legend-dot.np { background: var(--notyet-slate); }
+    
+    .legend-count {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--ink-primary);
+      line-height: 1;
+    }
+    
+    .legend-text {
+      flex: 1;
+    }
+    
+    .legend-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-primary);
       margin-bottom: 2px;
     }
-
-    h1 { margin: 0; font-size: 20px; color: #1e293b; font-weight: 900; line-height: 1; text-transform: uppercase; }
-    .header-subtext { font-size: 12px; color: #556070; font-family: "Georgia", serif; font-style: italic; }
-
-    /* CONTROLS */
-    .controls-wrapper { text-align: center; margin-bottom: 10px; flex-shrink: 0; }
-    .tri-controls { display: inline-flex; gap: 5px; background: white; padding: 4px; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .tri-btn { border: none; background: transparent; padding: 6px 16px; border-radius: 40px; font-weight: 700; color: var(--text-muted); cursor: pointer; font-size: 11px; transition: all 0.2s; }
-    .tri-btn:hover { background: #f1f5f9; }
-    .tri-btn.active { background: #2c3e50; color: white; box-shadow: 0 2px 6px rgba(44, 62, 80, 0.3); }
-
-    /* STABLE STATUS BANNER */
-    .status-banner {
-      display: flex; border-radius: 12px; padding: 8px; justify-content: center; gap: 30px; align-items: center;
-      transition: all 0.5s ease; min-height: 55px; border: 2px solid transparent; margin-bottom: 10px;
-    }
-    .banner-t1 { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #93c5fd; }
-    .banner-t2 { background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%); border-color: #fde047; }
-    .banner-t3 { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); border-color: #86efac; }
-    .banner-stat { text-align: center; animation: fadeIn 0.5s ease; }
-    .bn-val { font-size: 18px; font-weight: 800; display: block; line-height: 1; }
-    .bn-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; }
-    .banner-t1 .bn-val { color: #1e40af; } .banner-t2 .bn-val { color: #854d0e; } .banner-t3 .bn-val { color: #15803d; }
-
-    /* DASHBOARD */
-    .dashboard-summary { display: grid; grid-template-columns: 1fr 180px 1fr; gap: 10px; align-items: stretch; margin-bottom: 10px; }
-    @media (max-width: 800px) { .dashboard-summary { grid-template-columns: 1fr; } }
-    .dash-card { background: white; border-radius: 12px; padding: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.04); min-height: 140px; }
-    .dash-title { font-size: 9px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-align: center; letter-spacing: 0.5px; }
-
-    /* GAUGE */
-    .gauge-wrapper { position: relative; width: 130px; height: 65px; overflow: hidden; margin: 0 auto; }
-    .gauge-arc { width: 130px; height: 130px; border-radius: 50%; transform: rotate(-90deg); }
-    .gauge-inner { position: absolute; top: 28px; left: 28px; width: 74px; height: 74px; background: white; border-radius: 50%; z-index: 2; }
-    .arc-label { position: absolute; top: 50%; left: 50%; transform-origin: 0 0; width: 52px; text-align: right; font-size: 9px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); z-index: 1; display: flex; align-items: center; justify-content: flex-end; opacity: 0; transition: opacity 0.5s; }
-    .arc-label.visible { opacity: 1; }
-
-    /* DASHBOARD LISTS */
-    .comp-list { display: flex; flex-direction: column; gap: 5px; width: 100%; }
-    .comp-item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 8px; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
-    .comp-item:hover { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .ci-info { flex-grow: 1; display: flex; flex-direction: column; gap: 2px; }
-    .ci-name { font-size: 11px; font-weight: 700; color: var(--text-main); line-height: 1; }
-    .ci-bar-bg { width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden; }
-    .ci-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
-    .soaring .ci-bar-fill { background: var(--stat-i-border); }
-    .growing .ci-bar-fill { background: var(--stat-p-border); }
-
-    /* LEGEND Row */
-    .legend-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; flex-shrink: 0; }
-    .legend-box { border-radius: 8px; padding: 6px; text-align: center; border-top: 3px solid; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-    .l-title { font-weight: 800; font-size: 9px; margin-bottom: 2px; text-transform: uppercase; }
-    .l-desc { font-size: 8px; line-height: 1.1; opacity: 0.8; }
-
-    /* SCROLLABLE AREA */
-    .goals-scroll-area { flex-grow: 1; overflow-y: auto; border-radius: 12px; scrollbar-width: thin; padding-right: 5px; }
-
-    /* ACCORDIONS */
-    details.subject-card { background: white; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s; }
-    summary { list-style: none; padding: 10px 14px; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-radius: 12px; }
-    summary::-webkit-details-marker { display: none; }
-    .summary-left { display: flex; align-items: center; gap: 10px; }
-    .summary-title { font-size: 13px; font-weight: 700; }
-    .summary-right-group { display: flex; align-items: center; gap: 12px; }
-    .mini-stack { width: 100px; height: 7px; background: #f1f5f9; border-radius: 4px; display: flex; overflow: hidden; }
-    .ms-seg { height: 100%; transition: width 0.6s ease; }
-    .ms-seg.i { background: var(--stat-i-border); } .ms-seg.d { background: var(--stat-d-border); } .ms-seg.p { background: var(--stat-p-border); } .ms-seg.np { background: #cbd5e1; }
-    .accordion-icon { color: var(--text-muted); transition: transform 0.3s; display: flex; }
-    details[open] .accordion-icon { transform: rotate(180deg); }
-
-    .card-body { padding: 0 14px 14px 14px; border-top: 1px solid #f0f0f0; animation: slideDown 0.3s ease; }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; } }
-    .goal-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #eee; align-items: flex-start; }
-    .goal-row:last-child { border-bottom: none; }
-    .progress-track { flex-shrink: 0; display: flex; gap: 2px; padding: 2px; background: rgba(0,0,0,0.03); border-radius: 5px; }
-    .seg { width: 9px; height: 16px; border-radius: 2px; background: #e2e8f0; transition: background 0.4s; }
-    .p .seg:nth-child(1) { background: var(--stat-p-border); }
-    .d .seg:nth-child(1), .d .seg:nth-child(2) { background: var(--stat-d-border); }
-    .i .seg:nth-child(1), .i .seg:nth-child(2), .i .seg:nth-child(3) { background: var(--stat-i-border); }
-    .goal-level-label { font-size: 8px; font-weight: 800; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; display: inline-block; margin-bottom: 2px; }
-    .goal-text { font-size: 11px; font-weight: 600; line-height: 1.3; }
-    .improved-badge { font-size: 8px; background: #dcfce7; color: #166534; padding: 1px 4px; border-radius: 3px; font-weight: 700; margin-left: 5px; }
     
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .footer { text-align: center; font-size: 9px; padding: 15px 0; color: var(--text-muted); }
+    .legend-desc {
+      font-size: 10px;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+    
+    /* Improvement Card */
+    .improvement-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      border: 1px solid rgba(0,0,0,0.04);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    
+    .improvement-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 200px;
+      height: 200px;
+      background: var(--bg-elevated);
+      border-radius: 50%;
+    }
+    
+    .improvement-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .improvement-number {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: var(--ink-primary);
+    }
+    
+    .improvement-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+    }
+    
+    .improvement-icon {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 24px;
+      z-index: 1;
+    }
+    
+    /* Subject Cards */
+    .subjects-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    
+    .subjects-scroll-wrapper {
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 8px;
+    }
+    
+    .subjects-scroll-wrapper::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .subjects-scroll-wrapper::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .subjects-scroll-wrapper::-webkit-scrollbar-thumb {
+      background: var(--ink-muted);
+      border-radius: 100px;
+    }
+    
+    /* Independence Scale */
+    .independence-scale {
+      position: absolute;
+      left: -48px;
+      top: 60px;
+      bottom: 20px;
+      width: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0.6;
+    }
+    
+    .scale-gradient {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 12px;
+      width: 8px;
+      background: linear-gradient(to bottom, 
+        var(--bloom-green) 0%, 
+        var(--demo-blue) 33%, 
+        var(--practice-amber) 66%, 
+        var(--notyet-slate) 100%);
+      border-radius: 100px;
+    }
+    
+    .scale-arrow {
+      position: absolute;
+      top: -8px;
+      left: 4px;
+      font-size: 16px;
+    }
+    
+    .scale-label {
+      position: relative;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-muted);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      margin: auto;
+    }
+    
+    @media (max-width: 1000px) {
+      .independence-scale { display: none; }
+    }
+    
+    .subjects-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+    
+    .subjects-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 400;
+    }
+    
+    .sort-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-weight: 600;
+      background: var(--bg-elevated);
+      padding: 8px 14px;
+      border-radius: 100px;
+    }
+    
+    .sort-explanation {
+      font-size: 12px;
+      color: var(--ink-secondary);
+      line-height: 1.4;
+      padding: 10px 14px;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      border-left: 3px solid var(--bloom-green);
+      flex-shrink: 0;
+    }
+    
+    .subject-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(0,0,0,0.04);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 8px;
+    }
+    
+    .subject-card:hover {
+      box-shadow: var(--shadow-elevated);
+      border-color: rgba(0,0,0,0.08);
+    }
+    
+    .subject-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .subject-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .subject-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+    
+    .subject-card[open] .subject-icon { transform: scale(1.1); }
+    
+    .subject-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+    
+    .subject-meta {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+    
+    .subject-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .mini-progress {
+      width: 120px;
+      height: 8px;
+      background: var(--bg-elevated);
+      border-radius: 100px;
+      overflow: hidden;
+      display: flex;
+    }
+    
+    .mini-seg {
+      height: 100%;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mini-seg.i { background: var(--bloom-green); }
+    .mini-seg.d { background: var(--demo-blue); }
+    .mini-seg.p { background: var(--practice-amber); }
+    .mini-seg.np { background: var(--notyet-slate); }
+    
+    .chevron {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    
+    .subject-card[open] .chevron {
+      transform: rotate(180deg);
+      background: var(--ink-primary);
+      color: white;
+    }
+    
+    .chevron svg { width: 16px; height: 16px; }
+    
+    .goals-list {
+      padding: 0 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+    }
+    
+    .goal-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      transition: all 0.3s;
+    }
+    
+    .goal-item:hover { background: var(--bg-canvas); }
+    
+    .status-indicator {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    
+    .status-indicator.i { background: var(--bloom-green-soft); color: var(--bloom-green); }
+    .status-indicator.d { background: var(--demo-blue-soft); color: var(--demo-blue); }
+    .status-indicator.p { background: var(--practice-amber-soft); color: var(--practice-amber); }
+    .status-indicator.np { background: var(--notyet-slate-soft); color: var(--notyet-slate); }
+    
+    .status-letter {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    
+    .status-dots {
+      display: flex;
+      gap: 3px;
+      margin-top: 6px;
+    }
+    
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.2;
+    }
+    
+    .status-dot.filled { opacity: 1; }
+    
+    .improved-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 20px;
+      height: 20px;
+      background: var(--bloom-green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
+      animation: pulse-badge 2s infinite;
+    }
+    
+    @keyframes pulse-badge {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .goal-content { flex: 1; min-width: 0; }
+    
+    .goal-status-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    
+    .goal-status-label.i { color: var(--bloom-green); }
+    .goal-status-label.d { color: var(--demo-blue); }
+    .goal-status-label.p { color: var(--practice-amber); }
+    .goal-status-label.np { color: var(--notyet-slate); }
+    
+    .goal-text {
+      font-size: 12px;
+      color: var(--ink-primary);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    
+    .goal-timeline {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 6px;
+    }
+    
+    .timeline-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      opacity: 0.3;
+      transition: all 0.3s;
+    }
+    
+    .timeline-dot.active { 
+      opacity: 1; 
+      transform: scale(1.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    
+    .timeline-dot.i { background: var(--bloom-green); }
+    .timeline-dot.d { background: var(--demo-blue); }
+    .timeline-dot.p { background: var(--practice-amber); }
+    .timeline-dot.np { background: var(--notyet-slate); }
+    
+    .timeline-line {
+      width: 10px;
+      height: 2px;
+      background: var(--bg-elevated);
+    }
+    
+    .footer {
+      display: none;
+    }
+    
+    .keyboard-hint {
+      display: none;
+    }
+    
+    @keyframes fadeInUp { to { opacity: 1; } }
+    
+    .key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--bg-elevated);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--ink-muted); border-radius: 100px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--ink-secondary); }
+    
+    details summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
   </style>
 </head>
 <body>
-
-<div class="container">
-  <header>
-    <div class="title-card">
-      <svg class="tree-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 15C50 15 65 30 65 45C65 55 60 60 50 60C40 60 35 55 35 45C35 30 50 15 50 15Z" fill="#86efac"/>
-        <path d="M50 5C50 5 70 25 70 45C70 60 60 70 50 70C40 70 30 60 30 45C30 25 50 5 50 5Z" fill="#4ade80" fill-opacity="0.6"/>
-        <rect x="45" y="70" width="10" height="25" rx="2" fill="#8d6e63"/>
-        <path d="M50 70C50 70 35 60 30 45C25 30 35 15 50 10" stroke="#166534" stroke-width="2" stroke-opacity="0.1"/>
-      </svg>
-      <div class="header-text-col">
-        <h1>GROWING INDEPENDENCE</h1>
-        <div class="header-subtext">Rooted in Strength, Reaching for the Sky</div>
-        <div class="top-pill">Student Progress Report • Grade 3</div>
-      </div>
-    </div>
-  </header>
-
-  <div class="controls-wrapper">
-    <div class="tri-controls">
-      <button class="tri-btn active" id="btn-1" onclick="updateView(1)">Tri 1</button>
-      <button class="tri-btn" id="btn-2" onclick="updateView(2)">Tri 2</button>
-      <button class="tri-btn" id="btn-3" onclick="updateView(3)">Tri 3</button>
-    </div>
-  </div>
-
-  <div class="dashboard-container">
-    <div class="status-banner" id="status-banner"></div>
-    <div class="dashboard-summary">
-      <div class="dash-card growing">
-        <div class="dash-title" style="color:var(--stat-p-text)">PRACTICING</div>
-        <div class="comp-list" id="list-growing"></div>
-      </div>
-      <div class="dash-card center-card">
-        <div class="dash-title" id="dash-tri-label">Distribution</div>
-        <div class="gauge-wrapper">
-          <div class="gauge-arc" id="gauge-arc"></div>
-          <div class="arc-label" id="lbl-np">NP</div>
-          <div class="arc-label" id="lbl-p">P</div>
-          <div class="arc-label" id="lbl-d">D</div>
-          <div class="arc-label" id="lbl-i">I</div>
-          <div class="gauge-inner"></div>
+  <div class="app-container">
+    <header class="header">
+      <div class="header-left">
+        <div class="avatar-ring">
+          <div class="avatar-inner">JS</div>
         </div>
-        <div class="gauge-label">
-          <span style="color:#cbd5e1">●</span> NP <span style="color:#fde047">●</span> P <span style="color:#93c5fd">●</span> D <span style="color:#86efac">●</span> I
+        <div class="header-title">
+          <h1>John Smith</h1>
+          <div class="header-subtitle">Grade 3 • Windham Woods School</div>
         </div>
       </div>
-      <div class="dash-card soaring">
-        <div class="dash-title" style="color:var(--stat-i-text)">INDEPENDENTLY APPLYING</div>
-        <div class="comp-list" id="list-soaring"></div>
+      
+      <nav class="trimester-nav">
+        <button class="tri-btn active" data-tri="1">Trimester 1</button>
+        <button class="tri-btn" data-tri="2">Trimester 2</button>
+        <button class="tri-btn" data-tri="3">Trimester 3</button>
+      </nav>
+    </header>
+    
+    <main class="main-content">
+      <aside class="sidebar">
+        <div class="progress-viz-card">
+          <div class="viz-header">
+            <h3 class="viz-title">Independence Overview</h3>
+            <span class="trimester-label" id="trimesterLabel">Trimester 1</span>
+          </div>
+          
+          <div class="radial-container">
+            <svg class="radial-ring" viewBox="0 0 220 220" id="radialChart"></svg>
+            <div class="radial-center">
+              <span class="radial-percent" id="radialPercent">0%</span>
+              <span class="radial-label">Mastered</span>
+            </div>
+          </div>
+          
+          <div class="legend" id="legend"></div>
+        </div>
+      </aside>
+      
+      <div class="right-column">
+        <div class="improvement-card" id="improvementCard">
+          <span class="improvement-icon">🎓</span>
+          <div class="improvement-content">
+            <div class="improvement-number" id="improvementNumber">0</div>
+            <div class="improvement-label">Goals improved since Trimester 1</div>
+          </div>
+        </div>
+        
+        <section class="subjects-container">
+          <div class="independence-scale">
+            <div class="scale-arrow">↑</div>
+            <div class="scale-gradient"></div>
+            <div class="scale-label">More Independent</div>
+          </div>
+          <div class="subjects-header">
+            <h2 class="subjects-title">Learning Areas</h2>
+            <div class="sort-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M3 6h18M7 12h14M11 18h10"/>
+              </svg>
+              Sorted by independence level
+            </div>
+          </div>
+          <div class="sort-explanation">
+            Learning areas are arranged by independence level, with the most independent areas at the top. The scale on the left provides a visual indicator of this progression.
+          </div>
+          <div class="subjects-scroll-wrapper">
+            <div id="subjectsContainer"></div>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
+    
+    <footer class="footer">
+      <span class="footer-brand">Windham Woods School</span> • 2025-2026 Academic Year
+    </footer>
+  </div>
+  
+  <div class="keyboard-hint">
+    Use <span class="key">←</span> <span class="key">→</span> arrow keys to navigate trimesters
   </div>
 
-  <div class="legend-row">
-    <div class="legend-box np" style="border-color:var(--stat-np-border)">
-      <div class="l-title">Not Presented</div>
-      <div class="l-desc">Not yet introduced.</div>
-    </div>
-    <div class="legend-box p" style="border-color:var(--stat-p-border)">
-      <div class="l-title">Practicing</div>
-      <div class="l-desc">1/3 Independence.</div>
-    </div>
-    <div class="legend-box d" style="border-color:var(--stat-d-border)">
-      <div class="l-title">Demonstrating</div>
-      <div class="l-desc">2/3 Independence.</div>
-    </div>
-    <div class="legend-box i" style="border-color:var(--stat-i-border)">
-      <div class="l-title">Independent</div>
-      <div class="l-desc">Full Independence.</div>
-    </div>
-  </div>
-
-  <div class="goals-scroll-area">
-    <div id="accordionsTarget"></div>
-    <div class="footer">Data represents teacher observations for 2025–2026 school year.</div>
-  </div>
-</div>
-
-<script>
-  const goals = [
-    {subject:"Mathematics", goal:"Base-ten: break up 3-digit numbers into hundreds/tens/ones", tri1:"D", tri2:"D", tri3:"I"},
-    {subject:"Mathematics", goal:"Read, write, and compare numbers up to 100", tri1:"D", tri2:"I", tri3:"I"},
-    {subject:"Mathematics", goal:"Use strategies to practice addition/subtraction fact fluency", tri1:"I", tri2:"I", tri3:"I"},
-    {subject:"Mathematics", goal:"Follow guided steps to add/subtract within 100", tri1:"NP", tri2:"P", tri3:"D"},
-    {subject:"Mathematics", goal:"Solve single-step add/subtract word problems", tri1:"P", tri2:"D", tri3:"I"},
-    {subject:"English Language Arts", goal:"Copy lowercase/uppercase print letters legibly", tri1:"P", tri2:"P", tri3:"D"},
-    {subject:"English Language Arts", goal:"Identify/define basic parts of speech", tri1:"D", tri2:"D", tri3:"I"},
-    {subject:"English Language Arts", goal:"Write 1 sentence with prompt + template", tri1:"P", tri2:"D", tri3:"D"},
-    {subject:"English Language Arts", goal:"Produce a variety of sentence types", tri1:"NP", tri2:"P", tri3:"D"},
-    {subject:"English Language Arts", goal:"Apply capitalization/punctuation rules", tri1:"P", tri2:"D", tri3:"D"},
-    {subject:"Science/SS Study Skills", goal:"Collaboratively identify essential vocabulary", tri1:"I", tri2:"I", tri3:"I"},
-    {subject:"Science/SS Study Skills", goal:"Develop typing skills (letters and short words)", tri1:"I", tri2:"I", tri3:"I"},
-    {subject:"Science/SS Study Skills", goal:"Teacher-guided note-taking process", tri1:"P", tri2:"D", tri3:"D"},
-    {subject:"E.C.O.", goal:"Recognize/identify a range of human emotions", tri1:"I", tri2:"I", tri3:"I"},
-    {subject:"E.C.O.", goal:"Explain the concept of a growth mindset", tri1:"D", tri2:"I", tri3:"I"},
-    {subject:"E.C.O.", goal:"Keep school materials intact and organized", tri1:"D", tri2:"D", tri3:"I"},
-    {subject:"Active Learning", goal:"Positively communicate and collaborate with teammates", tri1:"I", tri2:"I", tri3:"I"},
-    {subject:"Active Learning", goal:"Exhibit safe and responsible behavior", tri1:"I", tri2:"I", tri3:"I"}
-  ];
-
-  const STATUS_CONFIG = {
-    "I": { class: "i", label: "Blooming", score: 3 },
-    "D": { class: "d", label: "Demonstrating", score: 2 },
-    "P": { class: "p", label: "Practicing", score: 1 },
-    "NP": { class: "np", label: "Not Presented", score: 0 }
-  };
-
-  const SUBJECT_CONFIG = {
-    "Mathematics": { icon: "🧮" }, "English Language Arts": { icon: "📖" },
-    "Science/SS Study Skills": { icon: "🌍" }, "E.C.O.": { icon: "🌱" },
-    "Active Learning": { icon: "⚽" }
-  };
-
-  let currentTri = 1;
-  let isInitialized = false;
-
-  function updateView(t) {
-    currentTri = t;
-    document.querySelectorAll('.tri-btn').forEach((btn, idx) => { btn.classList.toggle('active', (idx + 1) === t); });
-    renderReport();
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if(e.key === "ArrowRight") updateView(currentTri >= 3 ? 1 : currentTri + 1);
-    if(e.key === "ArrowLeft") updateView(currentTri <= 1 ? 3 : currentTri - 1);
-  });
-
-  function renderReport() {
-    const grouped = {};
-    let totalNP=0, totalP=0, totalD=0, totalI=0, improved=0, mastered=0;
-    goals.forEach((g, idx) => {
-      g.id = idx;
-      if(!grouped[g.subject]) grouped[g.subject] = { items: [] };
-      grouped[g.subject].items.push(g);
-      const val = g[`tri${currentTri}`];
-      if(val==="I") { totalI++; mastered++; } else if(val==="D") totalD++; else if(val==="P") totalP++; else totalNP++;
-      if(currentTri > 1 && STATUS_CONFIG[val].score > STATUS_CONFIG[g.tri1].score) improved++;
-    });
-
-    const total = goals.length;
-    const banner = document.getElementById("status-banner");
-    banner.className = `status-banner banner-t${currentTri}`;
-    if(currentTri === 1) banner.innerHTML = `<div class="banner-stat"><span class="bn-val">🏁</span><span class="bn-lbl">Baseline</span></div><div class="banner-stat"><span class="bn-val">${total}</span><span class="bn-lbl">Total Goals</span></div>`;
-    else if(currentTri === 2) banner.innerHTML = `<div class="banner-stat"><span class="bn-val">📈</span><span class="bn-lbl">Progress</span></div><div class="banner-stat"><span class="bn-val">+${improved}</span><span class="bn-lbl">Improvements</span></div>`;
-    else banner.innerHTML = `<div class="banner-stat"><span class="bn-val">🎉</span><span class="bn-lbl">Year End</span></div><div class="banner-stat"><span class="bn-val">${mastered}</span><span class="bn-lbl">Mastered</span></div><div class="banner-stat"><span class="bn-val">+${improved}</span><span class="bn-lbl">Growth</span></div>`;
-
-    const arc = document.getElementById("gauge-arc");
-    const dNP = (totalNP/total)*180, dP = (totalP/total)*180, dD = (totalD/total)*180;
-    arc.style.background = `conic-gradient(var(--stat-np-border) 0 ${dNP}deg, var(--stat-p-border) ${dNP}deg ${dNP+dP}deg, var(--stat-d-border) ${dNP+dP}deg ${dNP+dP+dD}deg, var(--stat-i-border) ${dNP+dP+dD}deg 180deg, transparent 180deg)`;
-
-    const setL = (id, deg, show) => { const el = document.getElementById(id); el.classList.toggle('visible', show); if(show) el.style.transform = `rotate(${deg}deg) translateX(52px) rotate(${-deg}deg)`; };
-    setL('lbl-np', -90 + dNP/2, dNP > 10); setL('lbl-p', -90 + dNP + dP/2, dP > 10); setL('lbl-d', -90 + dNP + dP + dD/2, dD > 10); setL('lbl-i', -90 + dNP + dP + dD + (180-(dNP+dP+dD))/2, (180-(dNP+dP+dD)) > 10);
-
-    const subjects = Object.keys(grouped).map((s, i) => {
-      const items = grouped[s].items;
-      let score = 0; items.forEach(g => score += STATUS_CONFIG[g[`tri${currentTri}`]].score);
-      return { name: s, score, icon: SUBJECT_CONFIG[s].icon, pct: Math.round((items.filter(g => g[`tri${currentTri}`] === "I" || g[`tri${currentTri}`] === "D").length / items.length) * 100), id: i };
-    });
-
-    const sortS = [...subjects].sort((a,b) => b.score - a.score);
-    document.getElementById("list-soaring").innerHTML = sortS.slice(0, 3).map(s => `<div class="comp-item"><span class="ci-name">${s.icon} ${s.name}</span><div class="ci-info"><div class="ci-bar-bg"><div class="ci-bar-fill" style="width:${s.pct}%"></div></div></div></div>`).join("");
-    document.getElementById("list-growing").innerHTML = sortS.slice(-3).reverse().map(s => `<div class="comp-item"><span class="ci-name">${s.icon} ${s.name}</span><div class="ci-info"><div class="ci-bar-bg"><div class="ci-bar-fill" style="width:${s.pct}%"></div></div></div></div>`).join("");
-
-    if(!isInitialized) {
-      let html = "";
-      Object.keys(grouped).forEach((s, idx) => {
-        const items = grouped[s].items;
-        let rows = items.map(g => `<div class="goal-row"><div class="progress-track" id="tr-${g.id}"><div class="seg"></div><div class="seg"></div><div class="seg"></div></div><div class="goal-content"><div class="goal-level-label" id="lb-${g.id}"></div><div class="goal-text">${g.goal}</div></div></div>`).join("");
-        html += `<details class="subject-card"><summary><div class="summary-left"><span>${SUBJECT_CONFIG[s].icon}</span><span class="summary-title">${s}</span></div><div class="summary-right-group"><div class="mini-stack" id="ms-${idx}"><div class="ms-seg np"></div><div class="ms-seg p"></div><div class="ms-seg d"></div><div class="ms-seg i"></div></div><div class="accordion-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div></div></summary><div class="card-body">${rows}</div></details>`;
-      });
-      document.getElementById("accordionsTarget").innerHTML = html;
-      isInitialized = true;
+  <script>
+    const goals = [
+      {subject:"Mathematics", goal:"Break up 3-digit numbers into hundreds, tens, and ones; state digit value", tri1:"D", tri2:"D", tri3:"I"},
+      {subject:"Mathematics", goal:"Read, write, and compare numbers up to 100", tri1:"D", tri2:"I", tri3:"I"},
+      {subject:"Mathematics", goal:"Use strategies to practice addition/subtraction fact fluency", tri1:"I", tri2:"I", tri3:"I"},
+      {subject:"Mathematics", goal:"Follow teacher model and guided steps to add/subtract within 100", tri1:"NP", tri2:"P", tri3:"D"},
+      {subject:"Mathematics", goal:"Represent multiplication/division of the x2 fact family using models", tri1:"NP", tri2:"P", tri3:"D"},
+      {subject:"Mathematics", goal:"Solve single-step add/subtract word problems within 100", tri1:"P", tri2:"D", tri3:"I"},
+      {subject:"English Language Arts", goal:"Copy lowercase/uppercase print letters legibly with structured paper", tri1:"P", tri2:"P", tri3:"D"},
+      {subject:"English Language Arts", goal:"Identify and define basic parts of speech within expanded kernel sentences", tri1:"D", tri2:"D", tri3:"I"},
+      {subject:"English Language Arts", goal:"Write sentences with article, noun, verb, and where phrase", tri1:"P", tri2:"D", tri3:"D"},
+      {subject:"English Language Arts", goal:"Identify and produce a variety of sentence types", tri1:"NP", tri2:"P", tri3:"D"},
+      {subject:"English Language Arts", goal:"Write narrative, informational, and opinion paragraphs collaboratively", tri1:"P", tri2:"P", tri3:"D"},
+      {subject:"English Language Arts", goal:"Apply capitalization and punctuation rules in isolated exercises", tri1:"P", tri2:"D", tri3:"D"},
+      {subject:"Study Skills", goal:"Collaboratively identify essential terms and vocabulary", tri1:"I", tri2:"I", tri3:"I"},
+      {subject:"Study Skills", goal:"Develop typing skills with letters and short words/phrases", tri1:"I", tri2:"I", tri3:"I"},
+      {subject:"Study Skills", goal:"Teacher-guided note-taking using two-column format", tri1:"P", tri2:"D", tri3:"D"},
+      {subject:"Study Skills", goal:"Identify components of a map in guided exercises", tri1:"NP", tri2:"P", tri3:"D"},
+      {subject:"Social-Emotional", goal:"Recognize, identify, and name a range of human emotions", tri1:"I", tri2:"I", tri3:"I"},
+      {subject:"Social-Emotional", goal:"Explain the concept of a growth mindset", tri1:"D", tri2:"I", tri3:"I"},
+      {subject:"Social-Emotional", goal:"Keep school materials intact and organized with visual support", tri1:"D", tri2:"D", tri3:"I"},
+      {subject:"Social-Emotional", goal:"Understand expected/unexpected behaviors during structured activities", tri1:"I", tri2:"I", tri3:"I"},
+      {subject:"Specialized Support", goal:"OT: Draw recognizable pictures with 12+ details", tri1:"P", tri2:"P", tri3:"D"},
+      {subject:"Specialized Support", goal:"OT: Motor planning and sequencing for 3-4 step projects", tri1:"P", tri2:"D", tri3:"D"},
+      {subject:"Specialized Support", goal:"Counseling: Use strategies to manage uncertainty", tri1:"P", tri2:"D", tri3:"D"},
+      {subject:"Specialized Support", goal:"Speech: Produce /v/ sound in all word positions", tri1:"D", tri2:"I", tri3:"I"},
+      {subject:"Specialized Support", goal:"Speech: Auditory discrimination for similar sounds", tri1:"P", tri2:"D", tri3:"D"},
+      {subject:"Active Learning", goal:"Participate in games requiring whole body movements", tri1:"D", tri2:"I", tri3:"I"},
+      {subject:"Active Learning", goal:"Positively communicate and collaborate with teammates", tri1:"I", tri2:"I", tri3:"I"},
+      {subject:"Active Learning", goal:"Outdoor: Understand movement concepts and trail navigation", tri1:"I", tri2:"I", tri3:"I"},
+      {subject:"Active Learning", goal:"Outdoor: Exhibit safe and responsible behavior", tri1:"I", tri2:"I", tri3:"I"}
+    ];
+    
+    const STATUS_CONFIG = {
+      "I": { 
+        label: "Independent", 
+        score: 3, 
+        dots: 3,
+        desc: "Given a modeled example, demonstrates skill independently"
+      },
+      "D": { 
+        label: "Demonstrating", 
+        score: 2, 
+        dots: 2,
+        desc: "Demonstrates skill with occasional teacher support"
+      },
+      "P": { 
+        label: "Practicing", 
+        score: 1, 
+        dots: 1,
+        desc: "Demonstrates skill collaboratively or with heavy guidance"
+      },
+      "NP": { 
+        label: "Not Yet Presented", 
+        score: 0, 
+        dots: 0,
+        desc: "Skill has not yet been introduced"
+      }
+    };
+    
+    const SUBJECT_ICONS = {
+      "Mathematics": "🔢",
+      "English Language Arts": "📚",
+      "Study Skills": "🎯",
+      "Social-Emotional": "💚",
+      "Specialized Support": "🤝",
+      "Active Learning": "⚡"
+    };
+    
+    let currentTri = 1;
+    let openSubjects = new Set(); // Track which subjects are open
+    
+    const radialChart = document.getElementById('radialChart');
+    const radialPercent = document.getElementById('radialPercent');
+    const legend = document.getElementById('legend');
+    const improvementNumber = document.getElementById('improvementNumber');
+    const improvementCard = document.getElementById('improvementCard');
+    const subjectsContainer = document.getElementById('subjectsContainer');
+    const trimesterLabel = document.getElementById('trimesterLabel');
+    const triBtns = document.querySelectorAll('.tri-btn');
+    
+    function getStatus(val) {
+      return STATUS_CONFIG[val] || STATUS_CONFIG["NP"];
     }
-
-    Object.keys(grouped).forEach((s, idx) => {
-      const items = grouped[s].items;
-      let cNP=0, cP=0, cD=0, cI=0;
-      items.forEach(g => {
-        const v = g[`tri${currentTri}`], st = STATUS_CONFIG[v];
-        if(v==="I") cI++; else if(v==="D") cD++; else if(v==="P") cP++; else cNP++;
-        document.getElementById(`tr-${g.id}`).className = `progress-track ${st.class}`;
-        const lab = document.getElementById(`lb-${g.id}`);
-        lab.className = `goal-level-label l-${st.class}`;
-        lab.innerHTML = st.label + (currentTri > 1 && st.score > STATUS_CONFIG[g.tri1].score ? `<span class="improved-badge">UP ↗</span>` : "");
+    
+    function updateView(tri) {
+      currentTri = tri;
+      triBtns.forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.tri) === tri);
       });
-      const ms = document.getElementById(`ms-${idx}`);
-      ms.querySelector('.np').style.width = (cNP/items.length)*100 + "%";
-      ms.querySelector('.p').style.width = (cP/items.length)*100 + "%";
-      ms.querySelector('.d').style.width = (cD/items.length)*100 + "%";
-      ms.querySelector('.i').style.width = (cI/items.length)*100 + "%";
+      render();
+    }
+    
+    function render() {
+      let cI = 0, cD = 0, cP = 0, cNP = 0;
+      let improved = 0;
+      
+      goals.forEach(g => {
+        const val = g[`tri${currentTri}`];
+        if (val === "I") cI++;
+        else if (val === "D") cD++;
+        else if (val === "P") cP++;
+        else cNP++;
+        
+        if (currentTri > 1) {
+          const currentScore = getStatus(val).score;
+          const startScore = getStatus(g.tri1).score;
+          if (currentScore > startScore) improved++;
+        }
+      });
+      
+      const total = goals.length;
+      
+      // Update trimester label
+      trimesterLabel.textContent = `Trimester ${currentTri}`;
+      
+      // Radial Chart
+      const percentMastered = Math.round((cI / total) * 100);
+      radialPercent.textContent = `${percentMastered}%`;
+      
+      const radius = 95;
+      const circumference = 2 * Math.PI * radius;
+      
+      const pctI = cI / total;
+      const pctD = cD / total;
+      const pctP = cP / total;
+      const pctNP = cNP / total;
+      
+      const offsetI = 0;
+      const offsetD = pctI * circumference;
+      const offsetP = (pctI + pctD) * circumference;
+      const offsetNP = (pctI + pctD + pctP) * circumference;
+      
+      radialChart.innerHTML = `
+        <circle cx="110" cy="110" r="${radius}" fill="none" stroke="var(--notyet-slate)" stroke-width="20"
+          stroke-dasharray="${pctNP * circumference} ${circumference}"
+          stroke-dashoffset="${-offsetNP}"
+          transform="rotate(-90 110 110)"
+          style="transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1)"/>
+        <circle cx="110" cy="110" r="${radius}" fill="none" stroke="var(--practice-amber)" stroke-width="20"
+          stroke-dasharray="${pctP * circumference} ${circumference}"
+          stroke-dashoffset="${-offsetP}"
+          transform="rotate(-90 110 110)"
+          style="transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1)"/>
+        <circle cx="110" cy="110" r="${radius}" fill="none" stroke="var(--demo-blue)" stroke-width="20"
+          stroke-dasharray="${pctD * circumference} ${circumference}"
+          stroke-dashoffset="${-offsetD}"
+          transform="rotate(-90 110 110)"
+          style="transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1)"/>
+        <circle cx="110" cy="110" r="${radius}" fill="none" stroke="var(--bloom-green)" stroke-width="20"
+          stroke-dasharray="${pctI * circumference} ${circumference}"
+          stroke-dashoffset="0"
+          transform="rotate(-90 110 110)"
+          style="transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1)"/>
+      `;
+      
+      // Legend with definitions
+      const legendData = [
+        { key: "I", count: cI, ...STATUS_CONFIG["I"] },
+        { key: "D", count: cD, ...STATUS_CONFIG["D"] },
+        { key: "P", count: cP, ...STATUS_CONFIG["P"] },
+        { key: "NP", count: cNP, ...STATUS_CONFIG["NP"] }
+      ];
+      
+      legend.innerHTML = legendData.map(item => `
+        <div class="legend-item">
+          <div class="legend-indicator">
+            <div class="legend-dot ${item.key.toLowerCase()}"></div>
+            <span class="legend-count">${item.count}</span>
+          </div>
+          <div class="legend-text">
+            <div class="legend-name">${item.label}</div>
+            <div class="legend-desc">${item.desc}</div>
+          </div>
+        </div>
+      `).join('');
+      
+      // Improvement card - show total goals in T1, improvements in T2/T3
+      if (currentTri === 1) {
+        improvementNumber.textContent = total;
+        document.querySelector('.improvement-label').textContent = 'Total goals being tracked';
+      } else {
+        improvementNumber.textContent = improved;
+        document.querySelector('.improvement-label').textContent = 'Goals improved since Trimester 1';
+      }
+      
+      // Group & sort subjects
+      const grouped = {};
+      goals.forEach(g => {
+        if (!grouped[g.subject]) grouped[g.subject] = [];
+        grouped[g.subject].push(g);
+      });
+      
+      const subjectList = Object.keys(grouped).map(subj => {
+        const items = grouped[subj];
+        let sum = 0;
+        items.forEach(g => sum += getStatus(g[`tri${currentTri}`]).score);
+        return { name: subj, items, avg: sum / items.length };
+      });
+      subjectList.sort((a, b) => b.avg - a.avg); // Reverse sort - highest first
+      
+      // Render subjects
+      subjectsContainer.innerHTML = subjectList.map(subj => {
+        const { name, items } = subj;
+        const icon = SUBJECT_ICONS[name] || "📂";
+        const isOpen = openSubjects.has(name); // Check if this subject was open
+        
+        let sI = 0, sD = 0, sP = 0, sNP = 0;
+        items.forEach(g => {
+          const val = g[`tri${currentTri}`];
+          if (val === "I") sI++;
+          else if (val === "D") sD++;
+          else if (val === "P") sP++;
+          else sNP++;
+        });
+        const total = items.length;
+        
+        const goalsHtml = items.map(g => {
+          const val = g[`tri${currentTri}`];
+          const st = getStatus(val);
+          const isImproved = currentTri > 1 && st.score > getStatus(g.tri1).score;
+          
+          const dots = Array(3).fill(0).map((_, i) => 
+            `<span class="status-dot ${i < st.dots ? 'filled' : ''}"></span>`
+          ).join('');
+          
+          const timelineHtml = [1, 2, 3].map(t => {
+            const tVal = g[`tri${t}`];
+            const tClass = tVal.toLowerCase();
+            const isActive = t === currentTri; // Only current trimester is highlighted
+            return `
+              <span class="timeline-dot ${tClass} ${isActive ? 'active' : ''}">${t}</span>
+              ${t < 3 ? '<span class="timeline-line"></span>' : ''}
+            `;
+          }).join('');
+          
+          return `
+            <div class="goal-item">
+              <div class="status-indicator ${val.toLowerCase()}">
+                ${isImproved ? '<span class="improved-badge">↑</span>' : ''}
+                <span class="status-letter">${val}</span>
+                <div class="status-dots">${dots}</div>
+              </div>
+              <div class="goal-content">
+                <div class="goal-status-label ${val.toLowerCase()}">
+                  ${st.label}
+                  ${isImproved ? '<span style="font-size:10px;opacity:0.8">• Improved!</span>' : ''}
+                </div>
+                <div class="goal-text">${g.goal}</div>
+                <div class="goal-timeline">${timelineHtml}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+        
+        return `
+          <details class="subject-card" ${isOpen ? 'open' : ''} data-subject="${name}">
+            <summary class="subject-header">
+              <div class="subject-left">
+                <div class="subject-icon">${icon}</div>
+                <div>
+                  <div class="subject-name">${name}</div>
+                  <div class="subject-meta">${total} goals</div>
+                </div>
+              </div>
+              <div class="subject-right">
+                <div class="mini-progress">
+                  <div class="mini-seg np" style="width:${(sNP/total)*100}%"></div>
+                  <div class="mini-seg p" style="width:${(sP/total)*100}%"></div>
+                  <div class="mini-seg d" style="width:${(sD/total)*100}%"></div>
+                  <div class="mini-seg i" style="width:${(sI/total)*100}%"></div>
+                </div>
+                <div class="chevron">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </div>
+              </div>
+            </summary>
+            <div class="goals-list">${goalsHtml}</div>
+          </details>
+        `;
+      }).join('');
+      
+      // Add event listeners to track accordion state
+      document.querySelectorAll('.subject-card').forEach(card => {
+        card.addEventListener('toggle', (e) => {
+          const subjectName = e.target.dataset.subject;
+          if (e.target.open) {
+            openSubjects.add(subjectName);
+          } else {
+            openSubjects.delete(subjectName);
+          }
+        });
+      });
+    }
+    
+    triBtns.forEach(btn => {
+      btn.addEventListener('click', () => updateView(parseInt(btn.dataset.tri)));
     });
-  }
-  updateView(1);
-</script>
+    
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') updateView(currentTri >= 3 ? 1 : currentTri + 1);
+      if (e.key === 'ArrowLeft') updateView(currentTri <= 1 ? 3 : currentTri - 1);
+    });
+    
+    render();
+  </script>
 </body>
 </html>
